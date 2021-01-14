@@ -1,0 +1,29 @@
+import java.util.Arrays;
+import java.util.Scanner;
+ 
+class Solution {
+ 
+    static int T;
+    static int[] num;
+     
+    public static void main(String[] args) {
+         
+        Scanner scann = new Scanner(System.in);
+        T=scann.nextInt();
+        int sum=0;
+        for (int i = 1; i <= T; i++) {
+            sum=0;
+            num= new int[10];
+            for (int j = 0; j < num.length; j++) {
+                num[j]=scann.nextInt();
+            }
+            Arrays.sort(num);
+            for (int j = 1; j < num.length-1; j++) {
+                sum+= num[j];
+            }
+ 
+            System.out.printf("#%d %.0f\n",i , sum/8.0);
+        }
+    }
+ 
+}
