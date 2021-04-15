@@ -1,0 +1,89 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Solution {
+
+	static int[][] map;
+	static boolean[][] visited;
+	static int T;
+	static int time = 0;
+	static int ans = 0;
+	static int[] dr = { -1, 0, 1, 0 };
+	static int[] dc = { 0, 1, 0, -1 };
+	static int[][] cases = { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 1, 0, 1, 0 }, { 0, 1, 0, 1 }, { 1, 1, 0, 0 },
+			{ 0, 1, 1, 0 }, { 0, 0, 1, 1 }, { 1, 0, 0, 1 } };
+	static int N, M, R, C, L; // N: 세로크기 M: 가로크기 R: 맨홀세로위치 C: 맨홀가로위치 L: 소요된 시간
+
+	public static void main(String[] args) {
+		Scanner scann = new Scanner(System.in);
+		T = scann.nextInt();
+		for (int t = 1; t <= T; t++) {
+			time = 0;
+			ans = 0;
+			N = scann.nextInt();
+			M = scann.nextInt();
+			R = scann.nextInt();
+			C = scann.nextInt();
+			L = scann.nextInt();
+			time = L;
+			map = new int[N][M];
+			visited = new boolean[N][M];
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < M; j++) {
+					map[i][j] = scann.nextInt();
+				}
+			}
+			bfs();
+			System.out.println("#" + t + " " + ans);
+		}
+	}
+
+	private static void bfs() {
+		Queue<pos> q = new LinkedList<pos>();
+		q.offer(new pos(R, C));
+		visited[R][C] = true;
+		ans++;
+		time-=1;
+
+		while (!q.isEmpty()) {
+			int size=q.size();
+			if (time <= 0) {
+				return;
+			}
+			for (int i = 0; i < size; i++) {
+				pos temp = q.poll();
+				int mode = map[temp.r][temp.c];
+				for (int j = 0; j < 4; j++) {
+					int nr = temp.r + dr[j];
+					int nc = temp.c + dc[j];
+					if (checked(nr, nc)) {
+						int nextmode = map[nr][nc];
+						if (cases[nextmode][(j+2)%4]==cases[mode][j] && cases[mode][j] == 1 && visited[nr][nc] == false && map[nr][nc] != 0) {
+							visited[nr][nc] = true;
+							ans++;
+							q.offer(new pos(nr, nc));
+						}
+					}
+				}
+				
+			}
+			time--;
+		}
+	}
+
+	private static boolean checked(int nr, int nc) {
+		return nr >= 0 && nr < N && nc >= 0 && nc < M;
+	}
+
+	static class pos {
+		int r;
+		int c;
+
+		public pos(int r, int c) {
+			super();
+			this.r = r;
+			this.c = c;
+		}
+	}
+}
